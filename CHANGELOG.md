@@ -4,6 +4,15 @@ Maplibre welcomes participation and contributions from everyone.
 
 ### unreleased
 
+### v4.0.0 - November 9, 2024
+
+**BREAKING CHANGES:**
+- Update naming and packages to MapLibre (`org.maplibre.navigation.android`)
+- Update MapLibre native to v11
+
+### v3.0.1 - November 7, 2024
+
+- Update dependencies, build tools & configurations
 - Use last snapped bearing if no previous step is available
 - Fix crash on snap-to-route engine, caused by legs with only single step
 - Android manifest cleanup for `libnavigation-android`
@@ -11,6 +20,11 @@ Maplibre welcomes participation and contributions from everyone.
   - Remove Mapbox telemetry provider references (the references to code have already been removed)
 - Additional build version checks `if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)` for deprecated context register receiver calls.
 - Added directions builder `waypointIndices` to NavigationRoute builder.
+- Added sample code on how to use the Valhalla routing server directly in `ValhallaNavigationActivity`. Please make sure to add this line to the `app/main/res/values/developer-config.xml`:
+  ```xml
+    <string name="valhalla_url" translatable="false">https://valhalla1.openstreetmap.de/route</string>
+  ```
+- Fix crash on ManeuverView, caused by `contains` not being able to handle null values [#122](https://github.com/maplibre/maplibre-navigation-android/issues/122)
 
 ### v3.0.0 - November 5, 2023
 
