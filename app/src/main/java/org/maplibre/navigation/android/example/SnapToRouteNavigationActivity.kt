@@ -21,10 +21,10 @@ import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 import org.maplibre.navigation.android.navigation.v5.snap.SnapToRoute
 import okhttp3.Request
 import org.maplibre.navigation.android.example.databinding.ActivitySnapToRouteNavigationBinding
+import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsCriteria
 import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation
 import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationMapRoute
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -83,15 +83,15 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
         this.mapLibreMap = mapLibreMap
         mapLibreMap.setStyle(Style.Builder().fromUri(getString(R.string.map_style_light))) { style ->
             enableLocationComponent(style)
-        }
-
-        navigationMapRoute =
+            navigationMapRoute =
             NavigationMapRoute(
                 navigation,
                 binding.mapView,
                 mapLibreMap
             )
-        calculateRouteAndStartNavigation()
+            navigationMapRoute?.setRouteEatingEnabled(true)
+            calculateRouteAndStartNavigation()
+        }
     }
 
     @SuppressWarnings("MissingPermission")
@@ -211,5 +211,4 @@ class SnapToRouteNavigationActivity : AppCompatActivity(), OnMapReadyCallback,
         navigation.onDestroy()
         binding.mapView.onDestroy()
     }
-
 }

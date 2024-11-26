@@ -70,6 +70,8 @@ public abstract class NavigationViewOptions extends NavigationUiOptions {
     public abstract Builder shouldSimulateRoute(boolean shouldSimulateRoute);
 
     public abstract Builder waynameChipEnabled(boolean waynameChipEnabled);
+    
+    public abstract Builder routeEatingEnabled(boolean routeEatingEnabled);
 
     public abstract Builder navigationOptions(MapLibreNavigationOptions navigationOptions);
 
@@ -102,6 +104,7 @@ public abstract class NavigationViewOptions extends NavigationUiOptions {
     return new AutoValue_NavigationViewOptions.Builder()
       .navigationOptions(MapLibreNavigationOptions.builder().build())
       .shouldSimulateRoute(false)
-      .waynameChipEnabled(true);
+      .waynameChipEnabled(true)
+      .routeEatingEnabled(false);
   }
 }

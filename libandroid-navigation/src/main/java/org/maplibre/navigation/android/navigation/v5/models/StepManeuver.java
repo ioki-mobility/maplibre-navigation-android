@@ -108,7 +108,7 @@ public abstract class StepManeuver extends DirectionsJsonObject {
   /**
    * A traffic circle. While very similar to a larger version of a roundabout,
    * it does not necessarily follow roundabout rules for right of way.
-   * It can offer {@link com.mapbox.api.directions.v5.models.LegStep#rotaryName()}  parameters,
+   * It can offer {@link com.mapbox.services.android.navigation.v5.models.LegStep#rotaryName()}  parameters,
    * {@link LegStep#rotaryPronunciation()} ()}  parameters, or both,
    *  in addition to the {@link #exit()} property.
    *

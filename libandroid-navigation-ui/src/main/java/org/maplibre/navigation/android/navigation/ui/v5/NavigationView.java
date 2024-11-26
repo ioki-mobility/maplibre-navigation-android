@@ -689,6 +689,7 @@ public class NavigationView extends CoordinatorLayout implements LifecycleOwner,
 
   private void setupNavigationmapLibreMap(NavigationViewOptions options) {
     navigationMap.updateWaynameQueryMap(options.waynameChipEnabled());
+    navigationMap.updateRouteEatingEnabled(options.routeEatingEnabled());
   }
 
   /**

@@ -1,9 +1,11 @@
 package org.maplibre.navigation.android.navigation.ui.v5.map;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.maplibre.android.location.LocationComponent;
 import org.maplibre.android.maps.MapLibreMap;
+import org.maplibre.navigation.android.navigation.ui.v5.route.PrimaryRouteDrawer;
 
 class LocationFpsDelegate implements MapLibreMap.OnCameraIdleListener {
 
@@ -20,12 +22,15 @@ class LocationFpsDelegate implements MapLibreMap.OnCameraIdleListener {
   private static final int MAX_ANIMATION_FPS = Integer.MAX_VALUE;
   private final MapLibreMap mapLibreMap;
   private final LocationComponent locationComponent;
+  @Nullable
+  private final PrimaryRouteDrawer primaryRouteDrawer;
   private int currentFps = MAX_ANIMATION_FPS;
   private boolean isEnabled = true;
 
-  LocationFpsDelegate(@NonNull MapLibreMap mapLibreMap, @NonNull LocationComponent locationComponent) {
+  LocationFpsDelegate(@NonNull MapLibreMap mapLibreMap, @NonNull LocationComponent locationComponent, @Nullable PrimaryRouteDrawer primaryRouteDrawer) {
     this.mapLibreMap = mapLibreMap;
     this.locationComponent = locationComponent;
+    this.primaryRouteDrawer = primaryRouteDrawer;
     mapLibreMap.addOnCameraIdleListener(this);
   }
 
@@ -59,6 +64,11 @@ class LocationFpsDelegate implements MapLibreMap.OnCameraIdleListener {
     int maxAnimationFps = buildFpsFrom(zoom);
     if (currentFps != maxAnimationFps) {
       locationComponent.setMaxAnimationFps(maxAnimationFps);
+
+      if (primaryRouteDrawer != null) {
+        primaryRouteDrawer.setMaxAnimationFps(maxAnimationFps);
+      }
+
       currentFps = maxAnimationFps;
     }
   }

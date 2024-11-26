@@ -786,7 +786,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * {@link DirectionsCriteria#ANNOTATION_CONGESTION}
      * {@link DirectionsCriteria#ANNOTATION_MAXSPEED}
      * You can include several annotations as a comma-separated list. See the
-     * {@link com.mapbox.api.directions.v5.models.RouteLeg} object for more details on what is included with annotations.
+     * {@link com.mapbox.services.android.navigation.v5.models.RouteLeg} object for more details on what is included with annotations.
      * Must be used in conjunction with overview=full.
      *
      * @param annotations in string format and separated by commas if more than one annotation was

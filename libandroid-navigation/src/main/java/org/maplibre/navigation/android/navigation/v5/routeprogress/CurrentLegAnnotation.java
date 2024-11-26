@@ -32,7 +32,7 @@ public abstract class CurrentLegAnnotation implements Serializable {
 
   /**
    * The index used to retrieve the annotation values from each array in
-   * {@link org.maplibre.navigation.android.navigation.v5.models}.
+   * {@link org.maplibre.navigation.android.navigation.v5.models.LegAnnotation}.
    *
    * @return index used to look up annotation values
    * @since 0.13.0

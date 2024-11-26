@@ -131,6 +131,7 @@ public class MapLibreNavigationActivity extends AppCompatActivity implements OnN
   private void extractConfiguration(NavigationViewOptions.Builder options) {
     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
     options.shouldSimulateRoute(preferences.getBoolean(NavigationConstants.NAVIGATION_VIEW_SIMULATE_ROUTE, false));
+    options.routeEatingEnabled(preferences.getBoolean(NavigationConstants.NAVIGATION_VIEW_ROUTE_EATING, false));
   }
 
   private void finishNavigation() {

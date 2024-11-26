@@ -3,7 +3,6 @@ package org.maplibre.navigation.android.navigation.ui.v5.route;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import android.location.Location;

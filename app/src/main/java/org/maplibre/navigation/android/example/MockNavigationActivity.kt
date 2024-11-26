@@ -35,6 +35,7 @@ import org.maplibre.turf.TurfConstants
 import org.maplibre.turf.TurfMeasurement
 import okhttp3.Request
 import org.maplibre.navigation.android.example.databinding.ActivityMockNavigationBinding
+import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
 import org.maplibre.navigation.android.navigation.v5.milestone.Milestone
 import org.maplibre.navigation.android.navigation.v5.milestone.MilestoneEventListener
 import org.maplibre.navigation.android.navigation.v5.milestone.RouteMilestone
@@ -43,7 +44,6 @@ import org.maplibre.navigation.android.navigation.v5.milestone.TriggerProperty
 import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation
 import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions
 import org.maplibre.navigation.android.navigation.v5.navigation.NavigationEventListener
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationMapRoute
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -163,23 +163,24 @@ class MockNavigationActivity :
         this.mapLibreMap = mapLibreMap
         mapLibreMap.setStyle(Style.Builder().fromUri(getString(R.string.map_style_light))) { style ->
             enableLocationComponent(style)
-        }
 
-        navigationMapRoute =
+            navigationMapRoute =
             NavigationMapRoute(
                 navigation,
                 binding.mapView,
                 mapLibreMap
             )
+            navigationMapRoute?.setRouteEatingEnabled(true)
 
-        mapLibreMap.addOnMapClickListener(this)
-        Snackbar.make(
-            findViewById(R.id.container),
-            "Tap map to place waypoint",
-            Snackbar.LENGTH_LONG,
-        ).show()
+            mapLibreMap.addOnMapClickListener(this)
+            Snackbar.make(
+                findViewById(R.id.container),
+                "Tap map to place waypoint",
+                Snackbar.LENGTH_LONG,
+            ).show()
 
-        newOrigin()
+            newOrigin()
+            }
     }
 
     @SuppressWarnings("MissingPermission")
