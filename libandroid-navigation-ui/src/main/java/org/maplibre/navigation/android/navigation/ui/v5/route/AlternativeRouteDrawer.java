@@ -1,12 +1,13 @@
 package org.maplibre.navigation.android.navigation.ui.v5.route;
 
-
 import org.maplibre.android.maps.Style;
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
 
-public interface WayPointDrawer {
+import java.util.List;
 
-    void setRoute(DirectionsRoute route);
+public interface AlternativeRouteDrawer {
+
+    void setRoutes(List<DirectionsRoute> routes);
 
     void setStyle(Style style);
 

@@ -1,55 +1,48 @@
-package com.mapbox.services.android.navigation.ui.v5.route.impl;
+package org.maplibre.navigation.android.navigation.ui.v5.route.impl;
 
-import static com.mapbox.mapboxsdk.style.layers.Property.NONE;
-import static com.mapbox.mapboxsdk.style.layers.Property.VISIBLE;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.CONGESTION_KEY;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.HEAVY_CONGESTION_VALUE;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.MODERATE_CONGESTION_VALUE;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_CONGESTION_LAYER_ID;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_CONGESTION_SOURCE_ID;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_SOURCE_ID;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.SEVERE_CONGESTION_VALUE;
+
+
+import static org.maplibre.android.style.layers.Property.NONE;
+import static org.maplibre.android.style.layers.Property.VISIBLE;
+import static org.maplibre.android.style.layers.PropertyFactory.visibility;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.CONGESTION_KEY;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.HEAVY_CONGESTION_VALUE;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.MODERATE_CONGESTION_VALUE;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_CONGESTION_LAYER_ID;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_SOURCE_ID;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.SEVERE_CONGESTION_VALUE;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
-import android.util.Pair;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
 import androidx.core.content.ContextCompat;
-
-import com.google.gson.JsonObject;
-import com.mapbox.geojson.MultiLineString;
-import com.mapbox.services.android.navigation.v5.models.Congestion;
-import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
-import com.mapbox.services.android.navigation.v5.models.LegAnnotation;
-import com.mapbox.services.android.navigation.v5.models.LegStep;
-import com.mapbox.services.android.navigation.v5.models.RouteLeg;
-import com.mapbox.core.constants.Constants;
-import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.FeatureCollection;
-import com.mapbox.geojson.LineString;
-import com.mapbox.geojson.Point;
-import com.mapbox.mapboxsdk.maps.MapView;
-import com.mapbox.mapboxsdk.maps.Style;
-import com.mapbox.mapboxsdk.style.layers.Layer;
-import com.mapbox.mapboxsdk.style.layers.LineLayer;
-import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
-import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
-import com.mapbox.services.android.navigation.ui.v5.R;
-import com.mapbox.services.android.navigation.ui.v5.route.MapRouteLayerFactory;
-import com.mapbox.services.android.navigation.ui.v5.utils.MapUtils;
-import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
-import com.mapbox.turf.TurfConstants;
-import com.mapbox.turf.TurfMeasurement;
-import com.mapbox.turf.TurfMeta;
-import com.mapbox.turf.TurfMisc;
+import org.maplibre.android.maps.MapView;
+import org.maplibre.android.maps.Style;
+import org.maplibre.android.style.layers.Layer;
+import org.maplibre.android.style.layers.LineLayer;
+import org.maplibre.android.style.sources.GeoJsonOptions;
+import org.maplibre.android.style.sources.GeoJsonSource;
+import org.maplibre.geojson.Feature;
+import org.maplibre.geojson.FeatureCollection;
+import org.maplibre.geojson.LineString;
+import org.maplibre.geojson.MultiLineString;
+import org.maplibre.geojson.Point;
+import org.maplibre.navigation.android.navigation.ui.v5.R;
+import org.maplibre.navigation.android.navigation.ui.v5.route.MapRouteLayerFactory;
+import org.maplibre.navigation.android.navigation.ui.v5.utils.MapUtils;
+import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
+import org.maplibre.navigation.android.navigation.v5.models.LegAnnotation;
+import org.maplibre.navigation.android.navigation.v5.models.LegStep;
+import org.maplibre.navigation.android.navigation.v5.models.RouteLeg;
+import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+import org.maplibre.navigation.android.navigation.v5.utils.Constants;
+import org.maplibre.turf.TurfConstants;
+import org.maplibre.turf.TurfMeasurement;
+import org.maplibre.turf.TurfMisc;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -88,25 +81,25 @@ public class MapLibreCongestionPrimaryRouteDrawer extends MapLibrePrimaryRouteDr
             // Primary route
             float routeScale = typedArray.getFloat(R.styleable.NavigationMapRoute_routeScale, 1.0f);
             int routeColor = typedArray.getColor(R.styleable.NavigationMapRoute_routeColor,
-                ContextCompat.getColor(context, R.color.mapbox_navigation_route_blue));
+                ContextCompat.getColor(context, R.color.maplibre_navigation_route_blue));
             int routeModerateColor = typedArray.getColor(R.styleable.NavigationMapRoute_routeModerateCongestionColor,
-                ContextCompat.getColor(context, R.color.mapbox_navigation_route_congestion_moderate));
+                ContextCompat.getColor(context, R.color.maplibre_navigation_route_congestion_moderate));
             int routeHeavyColor = typedArray.getColor(R.styleable.NavigationMapRoute_routeHeavyCongestionColor,
-                ContextCompat.getColor(context, R.color.mapbox_navigation_route_congestion_heavy));
+                ContextCompat.getColor(context, R.color.maplibre_navigation_route_congestion_heavy));
             int routeSevereColor = typedArray.getColor(R.styleable.NavigationMapRoute_routeSevereCongestionColor,
-                ContextCompat.getColor(context, R.color.mapbox_navigation_route_congestion_severe));
+                ContextCompat.getColor(context, R.color.maplibre_navigation_route_congestion_severe));
             int drivenRouteColor = typedArray.getColor(R.styleable.NavigationMapRoute_drivenRouteColor,
-                ContextCompat.getColor(context, R.color.mapbox_navigation_route_driven_color));
+                ContextCompat.getColor(context, R.color.maplibre_navigation_route_driven_color));
             int drivenRouteModerateColor = typedArray.getColor(R.styleable.NavigationMapRoute_drivenRouteModerateCongestionColor,
-                ContextCompat.getColor(context, R.color.mapbox_navigation_route_driven_congestion_moderate));
+                ContextCompat.getColor(context, R.color.maplibre_navigation_route_driven_congestion_moderate));
             int drivenRouteHeavyColor = typedArray.getColor(R.styleable.NavigationMapRoute_drivenRouteHeavyCongestionColor,
-                ContextCompat.getColor(context, R.color.mapbox_navigation_route_driven_congestion_heavy));
+                ContextCompat.getColor(context, R.color.maplibre_navigation_route_driven_congestion_heavy));
             int drivenRouteSevereColor = typedArray.getColor(R.styleable.NavigationMapRoute_drivenRouteSevereCongestionColor,
-                ContextCompat.getColor(context, R.color.mapbox_navigation_route_driven_congestion_severe));
+                ContextCompat.getColor(context, R.color.maplibre_navigation_route_driven_congestion_severe));
             int routeShieldColor = typedArray.getColor(R.styleable.NavigationMapRoute_routeShieldColor,
-                ContextCompat.getColor(context, R.color.mapbox_navigation_route_shield_layer_color));
+                ContextCompat.getColor(context, R.color.maplibre_navigation_route_shield_layer_color));
             int drivenRouteShieldColor = typedArray.getColor(R.styleable.NavigationMapRoute_drivenRouteShieldColor,
-                ContextCompat.getColor(context, R.color.mapbox_navigation_route_driven_shield_color));
+                ContextCompat.getColor(context, R.color.maplibre_navigation_route_driven_shield_color));
 
             createLayers(
                 mapStyle,
@@ -196,7 +189,7 @@ public class MapLibreCongestionPrimaryRouteDrawer extends MapLibrePrimaryRouteDr
 
         if (route != null) {
             // Draw full route
-            drawRoute(route, null, null);
+            drawRoute(route, (Point) null, null);
 
             if (route.legs() != null) {
                 ArrayList<List<CongestionStep>> legCongestionSteps = new ArrayList<>();

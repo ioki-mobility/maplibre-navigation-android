@@ -1,5 +1,7 @@
 package org.maplibre.navigation.android.navigation.ui.v5.route;
 
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.MAPLIBRE_LOCATION_ID;
+
 import android.app.Activity;
 
 import androidx.lifecycle.Lifecycle;
@@ -13,6 +15,12 @@ import androidx.annotation.StyleRes;
 
 import androidx.fragment.app.Fragment;
 
+import org.maplibre.android.style.layers.Layer;
+import org.maplibre.android.style.layers.SymbolLayer;
+import org.maplibre.navigation.android.navigation.ui.v5.route.impl.MapLibreCongestionAlternativeRouteDrawer;
+import org.maplibre.navigation.android.navigation.ui.v5.route.impl.MapLibreCongestionPrimaryRouteDrawer;
+import org.maplibre.navigation.android.navigation.ui.v5.route.impl.MapLibreRouteArrowDrawer;
+import org.maplibre.navigation.android.navigation.ui.v5.route.impl.MapLibreWayPointDrawer;
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
 import org.maplibre.android.maps.MapView;
 import org.maplibre.android.maps.MapLibreMap;
@@ -193,7 +201,7 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
             for (int i = 0; i < styleLayers.size(); i++) {
                 if (!(styleLayers.get(i) instanceof SymbolLayer)
                         // Avoid placing the route on top of the user location layer
-                        && !styleLayers.get(i).getId().contains(RouteConstants.MAPBOX_LOCATION_ID)) {
+                        && !styleLayers.get(i).getId().contains(MAPLIBRE_LOCATION_ID)) {
                     belowLayer = styleLayers.get(i).getId();
                 }
             }
@@ -336,7 +344,7 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
     }
 
     /**
-     * This method should be added in your {@link Activity#onStart()} or
+     * This method should be added in your Activity#onStart() or
      * {@link Fragment#onStart()} to handle adding and removing of listeners,
      * preventing memory leaks.
      */
@@ -346,7 +354,7 @@ public class NavigationMapRoute implements LifecycleObserver, OnRouteSelectionCh
     }
 
     /**
-     * This method should be added in your {@link Activity#onStop()} or {@link Fragment#onStop()}
+     * This method should be added in your Activity#onStop() or {@link Fragment#onStop()}
      * to handle adding and removing of listeners, preventing memory leaks.
      */
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)

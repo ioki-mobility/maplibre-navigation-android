@@ -1,14 +1,11 @@
 package org.maplibre.navigation.android.navigation.ui.v5.map;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.maplibre.android.location.LocationComponent;
 import org.maplibre.android.maps.MapLibreMap;
-import com.mapbox.services.android.navigation.ui.v5.route.PrimaryRouteDrawer;
-import com.mapbox.services.android.navigation.ui.v5.route.impl.MapLibrePrimaryRouteDrawer;
+import org.maplibre.navigation.android.navigation.ui.v5.route.PrimaryRouteDrawer;
 
 class LocationFpsDelegate implements MapLibreMap.OnCameraIdleListener {
 

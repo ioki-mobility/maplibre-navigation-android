@@ -1,6 +1,5 @@
 package org.maplibre.navigation.android.navigation.ui.v5.map;
 
-import static org.maplibre.navigation.android.navigation.ui.v5.map.NavigationSymbolManager.MAPLIBRE_NAVIGATION_MARKER_NAME;
 import static org.maplibre.navigation.android.navigation.v5.navigation.NavigationConstants.NAVIGATION_MINIMUM_MAP_ZOOM;
 
 import android.annotation.SuppressLint;
@@ -20,6 +19,7 @@ import androidx.fragment.app.FragmentActivity;
 import org.maplibre.navigation.android.navigation.ui.v5.camera.NavigationCamera;
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute;
 import org.maplibre.navigation.android.navigation.ui.v5.route.OnRouteSelectionChangeListener;
+import org.maplibre.navigation.android.navigation.ui.v5.route.PrimaryRouteDrawer;
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
 import org.maplibre.geojson.Point;
 import org.maplibre.android.geometry.LatLng;
@@ -38,7 +38,6 @@ import org.maplibre.android.style.sources.Source;
 import org.maplibre.android.style.sources.VectorSource;
 import org.maplibre.navigation.android.navigation.ui.v5.R;
 import org.maplibre.navigation.android.navigation.ui.v5.ThemeSwitcher;
-import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
 import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation;
 
 import java.util.List;
@@ -310,7 +309,7 @@ public class NavigationMapLibreMap {
   /**
    * Can be used to restore a {@link NavigationMapLibreMap} after it has been initialized.
    * <p>
-   * This cannot be called in {@link FragmentActivity#onRestoreInstanceState(Bundle)}
+   * This cannot be called in FragmentActivity#onRestoreInstanceState(Bundle)
    * because we cannot guarantee the map is re-initialized at that point.
    * <p>
    * You can extract the {@link NavigationMapLibreMapInstanceState} in <tt>onRestoreInstanceState</tt> and then
@@ -465,7 +464,7 @@ public class NavigationMapLibreMap {
   }
 
   /**
-   * Should be used in {@link FragmentActivity#onStart()} to ensure proper
+   * Should be used in FragmentActivity#onStart() to ensure proper
    * accounting for the lifecycle.
    */
   public void onStart() {
@@ -477,7 +476,7 @@ public class NavigationMapLibreMap {
   }
 
   /**
-   * Should be used in {@link FragmentActivity#onStop()} to ensure proper
+   * Should be used in FragmentActivity#onStop() to ensure proper
    * accounting for the lifecycle.
    */
   public void onStop() {
@@ -489,7 +488,7 @@ public class NavigationMapLibreMap {
   }
 
     /**
-     * Should be used in {@link FragmentActivity#onDestroy()} to ensure proper
+     * Should be used in FragmentActivity#onDestroy() to ensure proper
      * accounting for the lifecycle.
      */
     @UiThread
@@ -504,6 +503,7 @@ public class NavigationMapLibreMap {
    *
    * @param isVisible true to show, false to hide
    */
+  @SuppressLint("MissingPermission")
   public void updateLocationVisibilityTo(boolean isVisible) {
     locationComponent.setLocationComponentEnabled(isVisible);
   }

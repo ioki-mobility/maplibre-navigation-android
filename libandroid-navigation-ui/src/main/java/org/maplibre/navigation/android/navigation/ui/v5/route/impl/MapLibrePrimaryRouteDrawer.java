@@ -1,12 +1,12 @@
-package com.mapbox.services.android.navigation.ui.v5.route.impl;
+package org.maplibre.navigation.android.navigation.ui.v5.route.impl;
 
-import static com.mapbox.mapboxsdk.style.layers.Property.NONE;
-import static com.mapbox.mapboxsdk.style.layers.Property.VISIBLE;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_LAYER_ID;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_SHIELD_LAYER_ID;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_SOURCE_ID;
+import static org.maplibre.android.style.layers.Property.NONE;
+import static org.maplibre.android.style.layers.Property.VISIBLE;
+import static org.maplibre.android.style.layers.PropertyFactory.visibility;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_LAYER_ID;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_SHIELD_LAYER_ID;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_SOURCE_ID;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -23,29 +23,30 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
 import androidx.core.content.ContextCompat;
 
+
 import com.google.gson.JsonObject;
-import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
-import com.mapbox.core.constants.Constants;
-import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.FeatureCollection;
-import com.mapbox.geojson.LineString;
-import com.mapbox.geojson.Point;
-import com.mapbox.mapboxsdk.maps.MapView;
-import com.mapbox.mapboxsdk.maps.Style;
-import com.mapbox.mapboxsdk.style.layers.Layer;
-import com.mapbox.mapboxsdk.style.layers.LineLayer;
-import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
-import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
-import com.mapbox.services.android.navigation.ui.v5.R;
-import com.mapbox.services.android.navigation.ui.v5.route.MapRouteLayerFactory;
-import com.mapbox.services.android.navigation.ui.v5.route.PrimaryRouteDrawer;
-import com.mapbox.services.android.navigation.ui.v5.utils.MapUtils;
-import com.mapbox.services.android.navigation.v5.models.LegStep;
-import com.mapbox.services.android.navigation.v5.models.RouteLeg;
-import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
-import com.mapbox.turf.TurfConstants;
-import com.mapbox.turf.TurfMeasurement;
-import com.mapbox.turf.TurfMisc;
+import org.maplibre.android.maps.MapView;
+import org.maplibre.android.maps.Style;
+import org.maplibre.android.style.layers.Layer;
+import org.maplibre.android.style.layers.LineLayer;
+import org.maplibre.android.style.sources.GeoJsonOptions;
+import org.maplibre.android.style.sources.GeoJsonSource;
+import org.maplibre.geojson.Feature;
+import org.maplibre.geojson.FeatureCollection;
+import org.maplibre.geojson.LineString;
+import org.maplibre.geojson.Point;
+import org.maplibre.navigation.android.navigation.ui.v5.R;
+import org.maplibre.navigation.android.navigation.ui.v5.route.MapRouteLayerFactory;
+import org.maplibre.navigation.android.navigation.ui.v5.route.PrimaryRouteDrawer;
+import org.maplibre.navigation.android.navigation.ui.v5.utils.MapUtils;
+import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
+import org.maplibre.navigation.android.navigation.v5.models.LegStep;
+import org.maplibre.navigation.android.navigation.v5.models.RouteLeg;
+import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+import org.maplibre.navigation.android.navigation.v5.utils.Constants;
+import org.maplibre.turf.TurfConstants;
+import org.maplibre.turf.TurfMeasurement;
+import org.maplibre.turf.TurfMisc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,13 +114,13 @@ public class MapLibrePrimaryRouteDrawer implements PrimaryRouteDrawer {
             // Primary route
             float routeScale = typedArray.getFloat(R.styleable.NavigationMapRoute_routeScale, 1.0f);
             int routeColor = typedArray.getColor(R.styleable.NavigationMapRoute_routeColor,
-                ContextCompat.getColor(context, R.color.mapbox_navigation_route_blue));
+                ContextCompat.getColor(context, R.color.maplibre_navigation_route_blue));
             int routeShieldColor = typedArray.getColor(R.styleable.NavigationMapRoute_routeShieldColor,
-                ContextCompat.getColor(context, R.color.mapbox_navigation_route_shield_layer_color));
+                ContextCompat.getColor(context, R.color.maplibre_navigation_route_shield_layer_color));
             int drivenRouteColor = typedArray.getColor(R.styleable.NavigationMapRoute_drivenRouteColor,
-                ContextCompat.getColor(context, R.color.mapbox_navigation_route_driven_color));
+                ContextCompat.getColor(context, R.color.maplibre_navigation_route_driven_color));
             int drivenRouteShieldColor = typedArray.getColor(R.styleable.NavigationMapRoute_drivenRouteShieldColor,
-                ContextCompat.getColor(context, R.color.mapbox_navigation_route_driven_shield_color));
+                ContextCompat.getColor(context, R.color.maplibre_navigation_route_driven_shield_color));
 
             createLayers(mapStyle, routeScale, routeColor, routeShieldColor, drivenRouteColor, drivenRouteShieldColor, belowLayerId);
         } finally {

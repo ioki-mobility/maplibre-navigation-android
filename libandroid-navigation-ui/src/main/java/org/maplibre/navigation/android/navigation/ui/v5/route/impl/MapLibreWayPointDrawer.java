@@ -1,40 +1,40 @@
-package com.mapbox.services.android.navigation.ui.v5.route.impl;
+package org.maplibre.navigation.android.navigation.ui.v5.route.impl;
 
-import static com.mapbox.mapboxsdk.style.layers.Property.NONE;
-import static com.mapbox.mapboxsdk.style.layers.Property.VISIBLE;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.WAYPOINT_DESTINATION_VALUE;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.WAYPOINT_LAYER_ID;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.WAYPOINT_ORIGIN_VALUE;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.WAYPOINT_PROPERTY_KEY;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.WAYPOINT_SOURCE_ID;
+
+
+import static org.maplibre.android.style.layers.Property.NONE;
+import static org.maplibre.android.style.layers.Property.VISIBLE;
+import static org.maplibre.android.style.layers.PropertyFactory.visibility;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.WAYPOINT_DESTINATION_VALUE;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.WAYPOINT_LAYER_ID;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.WAYPOINT_ORIGIN_VALUE;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.WAYPOINT_PROPERTY_KEY;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.WAYPOINT_SOURCE_ID;
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 
-import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
 import androidx.core.content.ContextCompat;
 
-import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
-import com.mapbox.services.android.navigation.v5.models.LegStep;
-import com.mapbox.services.android.navigation.v5.models.RouteLeg;
-import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.FeatureCollection;
-import com.mapbox.geojson.Point;
-import com.mapbox.mapboxsdk.maps.MapView;
-import com.mapbox.mapboxsdk.maps.Style;
-import com.mapbox.mapboxsdk.style.layers.Layer;
-import com.mapbox.mapboxsdk.style.layers.LineLayer;
-import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
-import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
-import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
-import com.mapbox.services.android.navigation.ui.v5.R;
-import com.mapbox.services.android.navigation.ui.v5.route.MapRouteLayerFactory;
-import com.mapbox.services.android.navigation.ui.v5.route.WayPointDrawer;
-import com.mapbox.services.android.navigation.ui.v5.utils.MapUtils;
+import org.maplibre.android.maps.MapView;
+import org.maplibre.android.maps.Style;
+import org.maplibre.android.style.layers.Layer;
+import org.maplibre.android.style.layers.SymbolLayer;
+import org.maplibre.android.style.sources.GeoJsonOptions;
+import org.maplibre.android.style.sources.GeoJsonSource;
+import org.maplibre.geojson.Feature;
+import org.maplibre.geojson.FeatureCollection;
+import org.maplibre.geojson.Point;
+import org.maplibre.navigation.android.navigation.ui.v5.R;
+import org.maplibre.navigation.android.navigation.ui.v5.route.MapRouteLayerFactory;
+import org.maplibre.navigation.android.navigation.ui.v5.route.WayPointDrawer;
+import org.maplibre.navigation.android.navigation.ui.v5.utils.MapUtils;
+import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
+import org.maplibre.navigation.android.navigation.v5.models.LegStep;
+import org.maplibre.navigation.android.navigation.v5.models.RouteLeg;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,8 +58,8 @@ public class MapLibreWayPointDrawer implements WayPointDrawer {
     public MapLibreWayPointDrawer(MapView mapView, @StyleRes int styleResId, MapRouteLayerFactory routeLayerFactory, @Nullable String belowLayerId) {
         this.styleResId = styleResId;
         this.routeLayerFactory = routeLayerFactory;
-        mapView.getMapAsync(mapboxMap -> {
-            mapStyle = mapboxMap.getStyle();
+        mapView.getMapAsync(mapLibreMap -> {
+            mapStyle = mapLibreMap.getStyle();
             //TODO: check for style availability and wait with callback for loading when not ready yet
             initStyle(mapView.getContext(), mapStyle, styleResId, belowLayerId);
         });

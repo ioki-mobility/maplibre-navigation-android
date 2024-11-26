@@ -3,7 +3,7 @@ package org.maplibre.navigation.android.navigation.ui.v5.route;
 import org.maplibre.android.constants.MapLibreConstants;
 
 public class RouteConstants {
-  static final String MAPLIBRE_LOCATION_ID = "mapbox-location";
+    static final String MAPLIBRE_LOCATION_ID = "mapbox-location";
   public static final String CONGESTION_KEY = "congestion";
 
   public static final String PRIMARY_ROUTE_SOURCE_ID = "maplibre-navigation-primary-route-source";

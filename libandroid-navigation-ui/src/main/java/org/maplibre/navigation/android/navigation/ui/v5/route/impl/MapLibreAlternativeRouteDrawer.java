@@ -1,37 +1,35 @@
-package com.mapbox.services.android.navigation.ui.v5.route.impl;
+package org.maplibre.navigation.android.navigation.ui.v5.route.impl;
 
-import static com.mapbox.mapboxsdk.style.layers.Property.NONE;
-import static com.mapbox.mapboxsdk.style.layers.Property.VISIBLE;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ALTERNATIVE_ROUTE_LAYER_ID;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ALTERNATIVE_ROUTE_SHIELD_LAYER_ID;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ALTERNATIVE_ROUTE_SOURCE_ID;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY;
+import static org.maplibre.android.style.layers.Property.NONE;
+import static org.maplibre.android.style.layers.Property.VISIBLE;
+import static org.maplibre.android.style.layers.PropertyFactory.visibility;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.ALTERNATIVE_ROUTE_LAYER_ID;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.ALTERNATIVE_ROUTE_SHIELD_LAYER_ID;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.ALTERNATIVE_ROUTE_SOURCE_ID;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.view.SurfaceHolder;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
 import androidx.core.content.ContextCompat;
 
-import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
-import com.mapbox.core.constants.Constants;
-import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.FeatureCollection;
-import com.mapbox.geojson.LineString;
-import com.mapbox.mapboxsdk.maps.MapView;
-import com.mapbox.mapboxsdk.maps.Style;
-import com.mapbox.mapboxsdk.style.layers.Layer;
-import com.mapbox.mapboxsdk.style.layers.LineLayer;
-import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
-import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
-import com.mapbox.services.android.navigation.ui.v5.R;
-import com.mapbox.services.android.navigation.ui.v5.route.AlternativeRouteDrawer;
-import com.mapbox.services.android.navigation.ui.v5.route.MapRouteLayerFactory;
-import com.mapbox.services.android.navigation.ui.v5.utils.MapUtils;
+import org.maplibre.android.maps.MapView;
+import org.maplibre.android.maps.Style;
+import org.maplibre.android.style.layers.Layer;
+import org.maplibre.android.style.layers.LineLayer;
+import org.maplibre.android.style.sources.GeoJsonOptions;
+import org.maplibre.android.style.sources.GeoJsonSource;
+import org.maplibre.geojson.Feature;
+import org.maplibre.geojson.FeatureCollection;
+import org.maplibre.geojson.LineString;
+import org.maplibre.navigation.android.navigation.ui.v5.R;
+import org.maplibre.navigation.android.navigation.ui.v5.route.AlternativeRouteDrawer;
+import org.maplibre.navigation.android.navigation.ui.v5.route.MapRouteLayerFactory;
+import org.maplibre.navigation.android.navigation.ui.v5.utils.MapUtils;
+import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
+import org.maplibre.navigation.android.navigation.v5.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,9 +74,9 @@ public class MapLibreAlternativeRouteDrawer implements AlternativeRouteDrawer {
 
             float alternativeRouteScale = typedArray.getFloat(R.styleable.NavigationMapRoute_alternativeRouteScale, 1.0f);
             int alternativeRouteColor = typedArray.getColor(R.styleable.NavigationMapRoute_alternativeRouteColor,
-                    ContextCompat.getColor(context, R.color.mapbox_navigation_alternative_route_color));
+                    ContextCompat.getColor(context, R.color.maplibre_navigation_alternative_route_color));
             int alternativeRouteShieldColor = typedArray.getColor(R.styleable.NavigationMapRoute_alternativeRouteShieldColor,
-                    ContextCompat.getColor(context, R.color.mapbox_navigation_alternative_route_shield_color));
+                    ContextCompat.getColor(context, R.color.maplibre_navigation_alternative_route_shield_color));
 
             createLayers(mapStyle, alternativeRouteScale, alternativeRouteColor, alternativeRouteShieldColor, belowLayerId);
         } finally {

@@ -1,18 +1,10 @@
-package com.mapbox.services.android.navigation.ui.v5.route.impl;
+package org.maplibre.navigation.android.navigation.ui.v5.route.impl;
 
-import static com.mapbox.mapboxsdk.style.layers.Property.NONE;
-import static com.mapbox.mapboxsdk.style.layers.Property.VISIBLE;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ALTERNATIVE_ROUTE_CONGESTION_SOURCE_ID;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ALTERNATIVE_ROUTE_LAYER_ID;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ALTERNATIVE_ROUTE_SHIELD_LAYER_ID;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ALTERNATIVE_ROUTE_SOURCE_ID;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.CONGESTION_KEY;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.HEAVY_CONGESTION_VALUE;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.MODERATE_CONGESTION_VALUE;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_DRIVEN_ROUTE_PROPERTY_KEY;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.PRIMARY_ROUTE_CONGESTION_SOURCE_ID;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.SEVERE_CONGESTION_VALUE;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.ALTERNATIVE_ROUTE_CONGESTION_SOURCE_ID;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.CONGESTION_KEY;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.HEAVY_CONGESTION_VALUE;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.MODERATE_CONGESTION_VALUE;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.SEVERE_CONGESTION_VALUE;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -22,29 +14,22 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
 import androidx.core.content.ContextCompat;
 
-import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
-import com.mapbox.services.android.navigation.v5.models.RouteLeg;
-import com.mapbox.core.constants.Constants;
-import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.FeatureCollection;
-import com.mapbox.geojson.LineString;
-import com.mapbox.geojson.Point;
-import com.mapbox.mapboxsdk.maps.MapView;
-import com.mapbox.mapboxsdk.maps.Style;
-import com.mapbox.mapboxsdk.style.layers.Layer;
-import com.mapbox.mapboxsdk.style.layers.LineLayer;
-import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
-import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
-import com.mapbox.services.android.navigation.ui.v5.R;
-import com.mapbox.services.android.navigation.ui.v5.route.AlternativeRouteDrawer;
-import com.mapbox.services.android.navigation.ui.v5.route.MapRouteLayerFactory;
-import com.mapbox.services.android.navigation.ui.v5.utils.MapUtils;
-import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
-import com.mapbox.turf.TurfConstants;
-import com.mapbox.turf.TurfMeasurement;
-import com.mapbox.turf.TurfMisc;
+import org.maplibre.android.maps.MapView;
+import org.maplibre.android.maps.Style;
+import org.maplibre.android.style.layers.LineLayer;
+import org.maplibre.android.style.sources.GeoJsonOptions;
+import org.maplibre.android.style.sources.GeoJsonSource;
+import org.maplibre.geojson.Feature;
+import org.maplibre.geojson.FeatureCollection;
+import org.maplibre.geojson.LineString;
+import org.maplibre.geojson.Point;
+import org.maplibre.navigation.android.navigation.ui.v5.R;
+import org.maplibre.navigation.android.navigation.ui.v5.route.MapRouteLayerFactory;
+import org.maplibre.navigation.android.navigation.ui.v5.utils.MapUtils;
+import org.maplibre.navigation.android.navigation.v5.models.DirectionsRoute;
+import org.maplibre.navigation.android.navigation.v5.models.RouteLeg;
+import org.maplibre.navigation.android.navigation.v5.utils.Constants;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -72,15 +57,15 @@ public class MapLibreCongestionAlternativeRouteDrawer extends MapLibreAlternativ
 
             float alternativeRouteScale = typedArray.getFloat(R.styleable.NavigationMapRoute_alternativeRouteScale, 1.0f);
             int alternativeRouteColor = typedArray.getColor(R.styleable.NavigationMapRoute_alternativeRouteColor,
-                    ContextCompat.getColor(context, R.color.mapbox_navigation_route_alternative_color));
+                    ContextCompat.getColor(context, R.color.maplibre_navigation_alternative_route_color));
             int alternativeRouteShieldColor = typedArray.getColor(R.styleable.NavigationMapRoute_alternativeRouteShieldColor,
-                    ContextCompat.getColor(context, R.color.mapbox_navigation_route_alternative_shield_color));
+                    ContextCompat.getColor(context, R.color.maplibre_navigation_alternative_route_shield_color));
             int alternativeRouteModerateColor = typedArray.getColor(R.styleable.NavigationMapRoute_alternativeRouteModerateCongestionColor,
-                    ContextCompat.getColor(context, R.color.mapbox_navigation_alternative_route_driven_congestion_moderate));
+                    ContextCompat.getColor(context, R.color.maplibre_navigation_alternative_route_driven_congestion_moderate));
             int alternativeRouteHeavyColor = typedArray.getColor(R.styleable.NavigationMapRoute_alternativeRouteModerateCongestionColor,
-                    ContextCompat.getColor(context, R.color.mapbox_navigation_alternative_route_driven_congestion_heavy));
+                    ContextCompat.getColor(context, R.color.maplibre_navigation_alternative_route_driven_congestion_heavy));
             int alternativeRouteSevereColor = typedArray.getColor(R.styleable.NavigationMapRoute_alternativeRouteSevereCongestionColor,
-                    ContextCompat.getColor(context, R.color.mapbox_navigation_alternative_route_driven_congestion_severe));
+                    ContextCompat.getColor(context, R.color.maplibre_navigation_alternative_route_driven_congestion_severe));
 
             createLayers(
                     mapStyle,

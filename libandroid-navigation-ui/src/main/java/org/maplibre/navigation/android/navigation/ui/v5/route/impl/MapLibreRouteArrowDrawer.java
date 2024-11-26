@@ -1,4 +1,46 @@
-package com.mapbox.services.android.navigation.ui.v5.route.impl;
+package org.maplibre.navigation.android.navigation.ui.v5.route.impl;
+
+import static org.maplibre.android.style.expressions.Expression.color;
+import static org.maplibre.android.style.expressions.Expression.get;
+import static org.maplibre.android.style.expressions.Expression.interpolate;
+import static org.maplibre.android.style.expressions.Expression.linear;
+import static org.maplibre.android.style.expressions.Expression.step;
+import static org.maplibre.android.style.expressions.Expression.stop;
+import static org.maplibre.android.style.expressions.Expression.zoom;
+import static org.maplibre.android.style.layers.Property.ICON_ROTATION_ALIGNMENT_MAP;
+import static org.maplibre.android.style.layers.Property.NONE;
+import static org.maplibre.android.style.layers.Property.VISIBLE;
+import static org.maplibre.android.style.layers.PropertyFactory.iconAllowOverlap;
+import static org.maplibre.android.style.layers.PropertyFactory.iconIgnorePlacement;
+import static org.maplibre.android.style.layers.PropertyFactory.visibility;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.ARROW_BEARING;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.ARROW_HEAD_CASING_LAYER_ID;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.ARROW_HEAD_CASING_OFFSET;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.ARROW_HEAD_ICON;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.ARROW_HEAD_ICON_CASING;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.ARROW_HEAD_LAYER_ID;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.ARROW_HEAD_OFFSET;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.ARROW_HEAD_SOURCE_ID;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.ARROW_HIDDEN_ZOOM_LEVEL;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.ARROW_SHAFT_CASING_LINE_LAYER_ID;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.ARROW_SHAFT_LINE_LAYER_ID;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.ARROW_SHAFT_SOURCE_ID;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.LAYER_ABOVE_UPCOMING_MANEUVER_ARROW;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.MAX_ARROW_ZOOM;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.MAX_DEGREES;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.MAX_ZOOM_ARROW_HEAD_CASING_SCALE;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.MAX_ZOOM_ARROW_HEAD_SCALE;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.MAX_ZOOM_ARROW_SHAFT_CASING_SCALE;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.MAX_ZOOM_ARROW_SHAFT_SCALE;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.MIN_ARROW_ZOOM;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.MIN_ZOOM_ARROW_HEAD_CASING_SCALE;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.MIN_ZOOM_ARROW_HEAD_SCALE;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.MIN_ZOOM_ARROW_SHAFT_CASING_SCALE;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.MIN_ZOOM_ARROW_SHAFT_SCALE;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.OPAQUE;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.THIRTY;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.TRANSPARENT;
+import static org.maplibre.navigation.android.navigation.ui.v5.route.RouteConstants.TWO_POINTS;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -10,74 +52,32 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.appcompat.content.res.AppCompatResources;
 
-import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.FeatureCollection;
-import com.mapbox.geojson.LineString;
-import com.mapbox.geojson.Point;
-import com.mapbox.mapboxsdk.maps.MapView;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.maps.Style;
-import com.mapbox.mapboxsdk.style.layers.Layer;
-import com.mapbox.mapboxsdk.style.layers.LineLayer;
-import com.mapbox.mapboxsdk.style.layers.Property;
-import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
-import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
-import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
-import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
-import com.mapbox.mapboxsdk.utils.MathUtils;
-import com.mapbox.services.android.navigation.ui.v5.R;
-import com.mapbox.services.android.navigation.ui.v5.route.RouteArrowDrawer;
-import com.mapbox.services.android.navigation.ui.v5.utils.MapImageUtils;
-import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
-import com.mapbox.turf.TurfConstants;
-import com.mapbox.turf.TurfMeasurement;
-import com.mapbox.turf.TurfMisc;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.mapbox.mapboxsdk.style.expressions.Expression.color;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.get;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.interpolate;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.linear;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.step;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.stop;
-import static com.mapbox.mapboxsdk.style.expressions.Expression.zoom;
-import static com.mapbox.mapboxsdk.style.layers.Property.ICON_ROTATION_ALIGNMENT_MAP;
-import static com.mapbox.mapboxsdk.style.layers.Property.NONE;
-import static com.mapbox.mapboxsdk.style.layers.Property.VISIBLE;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconIgnorePlacement;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ARROW_BEARING;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ARROW_HEAD_CASING_LAYER_ID;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ARROW_HEAD_CASING_OFFSET;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ARROW_HEAD_ICON;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ARROW_HEAD_ICON_CASING;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ARROW_HEAD_LAYER_ID;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ARROW_HEAD_OFFSET;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ARROW_HEAD_SOURCE_ID;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ARROW_HIDDEN_ZOOM_LEVEL;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ARROW_SHAFT_CASING_LINE_LAYER_ID;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ARROW_SHAFT_LINE_LAYER_ID;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.ARROW_SHAFT_SOURCE_ID;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.LAYER_ABOVE_UPCOMING_MANEUVER_ARROW;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.MAX_ARROW_ZOOM;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.MAX_DEGREES;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.MAX_ZOOM_ARROW_HEAD_CASING_SCALE;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.MAX_ZOOM_ARROW_HEAD_SCALE;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.MAX_ZOOM_ARROW_SHAFT_CASING_SCALE;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.MAX_ZOOM_ARROW_SHAFT_SCALE;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.MIN_ARROW_ZOOM;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.MIN_ZOOM_ARROW_HEAD_CASING_SCALE;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.MIN_ZOOM_ARROW_HEAD_SCALE;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.MIN_ZOOM_ARROW_SHAFT_CASING_SCALE;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.MIN_ZOOM_ARROW_SHAFT_SCALE;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.OPAQUE;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.THIRTY;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.TRANSPARENT;
-import static com.mapbox.services.android.navigation.ui.v5.route.RouteConstants.TWO_POINTS;
+import org.maplibre.android.maps.MapLibreMap;
+import org.maplibre.android.maps.MapView;
+import org.maplibre.android.maps.Style;
+import org.maplibre.android.style.layers.Layer;
+import org.maplibre.android.style.layers.LineLayer;
+import org.maplibre.android.style.layers.Property;
+import org.maplibre.android.style.layers.PropertyFactory;
+import org.maplibre.android.style.layers.SymbolLayer;
+import org.maplibre.android.style.sources.GeoJsonOptions;
+import org.maplibre.android.style.sources.GeoJsonSource;
+import org.maplibre.geojson.Feature;
+import org.maplibre.geojson.FeatureCollection;
+import org.maplibre.geojson.LineString;
+import org.maplibre.geojson.Point;
+import org.maplibre.navigation.android.navigation.ui.v5.R;
+import org.maplibre.navigation.android.navigation.ui.v5.route.RouteArrowDrawer;
+import org.maplibre.navigation.android.navigation.ui.v5.utils.MapImageUtils;
+import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress;
+import org.maplibre.navigation.android.navigation.v5.utils.MathUtils;
+import org.maplibre.turf.TurfConstants;
+import org.maplibre.turf.TurfMeasurement;
+import org.maplibre.turf.TurfMisc;
 
 public class MapLibreRouteArrowDrawer implements RouteArrowDrawer {
 
@@ -91,18 +91,18 @@ public class MapLibreRouteArrowDrawer implements RouteArrowDrawer {
   private GeoJsonSource arrowHeadGeoJsonSource;
 
   private final MapView mapView;
-  private final MapboxMap mapboxMap;
+  private final MapLibreMap mapboxMap;
 
-  public MapLibreRouteArrowDrawer(MapView mapView, MapboxMap mapboxMap, @StyleRes int styleRes) {
+  public MapLibreRouteArrowDrawer(MapView mapView, MapLibreMap mapLibreMap, @StyleRes int styleRes) {
     this.mapView = mapView;
-    this.mapboxMap = mapboxMap;
+    this.mapboxMap = mapLibreMap;
 
     Context context = mapView.getContext();
     TypedArray typedArray = context.obtainStyledAttributes(styleRes, R.styleable.NavigationMapRoute);
     arrowColor = typedArray.getColor(R.styleable.NavigationMapRoute_upcomingManeuverArrowColor,
-      ContextCompat.getColor(context, R.color.mapbox_navigation_route_upcoming_maneuver_arrow_color));
+      ContextCompat.getColor(context, R.color.maplibre_navigation_route_upcoming_maneuver_arrow_color));
     arrowBorderColor = typedArray.getColor(R.styleable.NavigationMapRoute_upcomingManeuverArrowBorderColor,
-      ContextCompat.getColor(context, R.color.mapbox_navigation_route_upcoming_maneuver_arrow_border_color));
+      ContextCompat.getColor(context, R.color.maplibre_navigation_route_upcoming_maneuver_arrow_border_color));
     typedArray.recycle();
 
     initialize();
@@ -249,7 +249,7 @@ public class MapLibreRouteArrowDrawer implements RouteArrowDrawer {
       ),
       PropertyFactory.lineCap(Property.LINE_CAP_ROUND),
       PropertyFactory.lineJoin(Property.LINE_JOIN_ROUND),
-      PropertyFactory.visibility(NONE),
+      visibility(NONE),
       PropertyFactory.lineOpacity(
         step(zoom(), OPAQUE,
           stop(
@@ -275,7 +275,7 @@ public class MapLibreRouteArrowDrawer implements RouteArrowDrawer {
       ),
       PropertyFactory.lineCap(Property.LINE_CAP_ROUND),
       PropertyFactory.lineJoin(Property.LINE_JOIN_ROUND),
-      PropertyFactory.visibility(NONE),
+      visibility(NONE),
       PropertyFactory.lineOpacity(
         step(zoom(), OPAQUE,
           stop(
@@ -304,7 +304,7 @@ public class MapLibreRouteArrowDrawer implements RouteArrowDrawer {
         PropertyFactory.iconOffset(ARROW_HEAD_OFFSET),
         PropertyFactory.iconRotationAlignment(ICON_ROTATION_ALIGNMENT_MAP),
         PropertyFactory.iconRotate(get(ARROW_BEARING)),
-        PropertyFactory.visibility(NONE),
+        visibility(NONE),
         PropertyFactory.iconOpacity(
           step(zoom(), OPAQUE,
             stop(
@@ -332,7 +332,7 @@ public class MapLibreRouteArrowDrawer implements RouteArrowDrawer {
       PropertyFactory.iconOffset(ARROW_HEAD_CASING_OFFSET),
       PropertyFactory.iconRotationAlignment(ICON_ROTATION_ALIGNMENT_MAP),
       PropertyFactory.iconRotate(get(ARROW_BEARING)),
-      PropertyFactory.visibility(NONE),
+      visibility(NONE),
       PropertyFactory.iconOpacity(
         step(zoom(), OPAQUE,
           stop(

@@ -21,10 +21,10 @@ import org.maplibre.navigation.android.navigation.v5.routeprogress.RouteProgress
 import org.maplibre.navigation.android.navigation.v5.snap.SnapToRoute
 import okhttp3.Request
 import org.maplibre.navigation.android.example.databinding.ActivitySnapToRouteNavigationBinding
+import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
 import org.maplibre.navigation.android.navigation.v5.models.DirectionsCriteria
 import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigation
 import org.maplibre.navigation.android.navigation.v5.navigation.MapLibreNavigationOptions
-import org.maplibre.navigation.android.navigation.v5.navigation.NavigationMapRoute
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
